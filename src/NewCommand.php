@@ -214,9 +214,8 @@ class NewCommand extends Command
     }
 
     protected function getPhpWithArguments(){
-        $php_bin = getenv('PHP_BIN') ?? PHP_BINARY;
-        $php_args = getenv('PHP_ARGS') ?? '';
-        return sprintf('%s %s',$php_bin,$php_args);
+        $php_args_env = getenv('PHP_ARGS');
+        return PHP_BINARY.($php_args_env ? " $php_args_env" : '');
     }
     /**
      * Get the composer command for the environment.

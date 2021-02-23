@@ -231,7 +231,7 @@ class NewCommand extends Command
             return '"'.$this->getPhpWithArguments().'" '.$composerPath;
         }
 
-        return $this->getPhpWithArguments().' composer';
+        return $this->getPhpWithArguments().' '.(getenv('COMPOSER_BIN') ?? 'composer');
     }
 
     /**

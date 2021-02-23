@@ -87,7 +87,9 @@ class NewCommand extends Command
 
         $commands = [];
 
-        if (!$input->getOption('skip-download')) {
+        if ($input->getOption('skip-download')) {
+            $commands[] = 'ls ' . $directory;
+        } else {
             $create_project_cmd = $composer . " create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist";
             $output->write('Create project from command: ' . $create_project_cmd);
             $commands[] = $create_project_cmd;

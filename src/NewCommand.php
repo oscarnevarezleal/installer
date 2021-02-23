@@ -264,6 +264,8 @@ class NewCommand extends Command
             }, $commands);
         }
 
+        print_r($commands);
+
         $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {

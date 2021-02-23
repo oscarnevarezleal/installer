@@ -83,9 +83,12 @@ class NewCommand extends Command
         }
 
         $composer = $this->findComposer();
+        $create_project_cmd = $composer." create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist";
+
+        $output->write('Create project from command: '.$create_project_cmd);
 
         $commands = [
-            $composer." create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist",
+            $create_project_cmd
         ];
 
         if ($directory != '.' && $input->getOption('force')) {

@@ -230,7 +230,7 @@ class NewCommand extends Command
             return '"'.$this->getPhpWithArguments().'" '.$composerPath;
         }
 
-        $composer_env = getenv('PHP_ARGS');
+        $composer_env = getenv('COMPOSER_BIN');
 
         return sprintf('%s %s', $this->getPhpWithArguments(),
             ($composer_env && !empty($composer_env) ? $composer_env : 'composer'));

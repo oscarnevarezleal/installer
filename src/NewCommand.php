@@ -215,7 +215,7 @@ class NewCommand extends Command
 
     protected function getPhpWithArguments(){
         $php_args_env = getenv('PHP_ARGS');
-        return PHP_BINARY.($php_args_env ? " $php_args_env" : '');
+        return PHP_BINARY.(!empty($php_args_env) ? " $php_args_env" : '');
     }
     /**
      * Get the composer command for the environment.
@@ -230,8 +230,10 @@ class NewCommand extends Command
             return '"'.$this->getPhpWithArguments().'" '.$composerPath;
         }
 
+        $composer_env = getenv('PHP_ARGS');
+
         return sprintf('%s %s', $this->getPhpWithArguments(),
-            (getenv('COMPOSER_BIN') ?? 'composer'));
+            ($composer_env && !empty($composer_env) ? $composer_env : 'composer'));
     }
 
     /**

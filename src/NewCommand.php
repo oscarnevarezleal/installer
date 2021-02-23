@@ -43,7 +43,7 @@ class NewCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $installJetstream = $input->getOption('jet') ||
-                            ($input->getOption('prompt-jetstream') && (new SymfonyStyle($input, $output))->confirm('Would you like to install the Laravel Jetstream application scaffolding?', false));
+            ($input->getOption('prompt-jetstream') && (new SymfonyStyle($input, $output))->confirm('Would you like to install the Laravel Jetstream application scaffolding?', false));
 
         if ($installJetstream) {
             $output->write(PHP_EOL."<fg=magenta>
@@ -55,8 +55,8 @@ class NewCommand extends Command
             $stack = $this->jetstreamStack($input, $output);
 
             $teams = $input->getOption('teams') === true
-                    ? (bool) $input->getOption('teams')
-                    : (new SymfonyStyle($input, $output))->confirm('Will your application use teams?', false);
+                ? (bool) $input->getOption('teams')
+                : (new SymfonyStyle($input, $output))->confirm('Will your application use teams?', false);
         } else {
             $output->write(PHP_EOL.'<fg=red> _                               _
 | |                             | |
@@ -147,9 +147,9 @@ class NewCommand extends Command
 
         $commands = array_filter([
             $this->findComposer().' require laravel/jetstream',
-            trim(sprintf(PHP_BINARY.' artisan jetstream:install %s %s', $stack, $teams ? '--teams' : '')),
+            trim(sprintf($this->getPhpWithArguments().' artisan jetstream:install %s %s', $stack, $teams ? '--teams' : '')),
             $stack === 'inertia' ? 'npm install && npm run dev' : null,
-            PHP_BINARY.' artisan storage:link',
+            $this->getPhpWithArguments().' artisan storage:link',
         ]);
 
         $this->runCommands($commands, $input, $output);
@@ -210,6 +210,11 @@ class NewCommand extends Command
         return '';
     }
 
+    protected function getPhpWithArguments(){
+        $php_bin = getenv('PHP_BIN') ?? PHP_BINARY;
+        $php_args = getenv('PHP_ARGS') ?? '';
+        return sprintf('%s %s',$php_bin,$php_args);
+    }
     /**
      * Get the composer command for the environment.
      *
@@ -220,10 +225,10 @@ class NewCommand extends Command
         $composerPath = getcwd().'/composer.phar';
 
         if (file_exists($composerPath)) {
-            return '"'.PHP_BINARY.'" '.$composerPath;
+            return '"'.$this->getPhpWithArguments().'" '.$composerPath;
         }
 
-        return 'composer';
+        return $this->getPhpWithArguments().' composer';
     }
 
     /**

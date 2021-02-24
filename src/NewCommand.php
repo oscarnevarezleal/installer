@@ -87,15 +87,16 @@ class NewCommand extends Command
 
         $commands = [];
 
-        $skipdownload = $input->getOption('skip-download');
-        $output->write('> skip-download?: '.print_r($skipdownload, true));
+        $skipdownload = true;
+        $output->write('> skip-download?: ');
+        print_r($input->getOption('skip-download'), true);
 
         if ($skipdownload) {
-            $output->write('> Skipping composer create-project: ');
+            $output->write(' ===> Skipping composer create-project: ');
             $commands[] = 'ls -ltah ' . $directory;
         } else {
             $create_project_cmd = $composer . " create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist";
-            $output->write('> Create project from command: ' . $create_project_cmd);
+            $output->write(' ===> Create project from command: ' . $create_project_cmd);
             $commands[] = $create_project_cmd;
         }
 

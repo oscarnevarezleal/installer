@@ -91,7 +91,7 @@ class NewCommand extends Command
 
         if ($skipdownload) {
             $commands[] = "echo 'skipping composer create-project' ";
-            $commands[] = $this->getPhpWithArguments().' -m';
+            $commands[] = $this->getPhpWithArguments() . ' -m';
         } else {
             $create_project_cmd = $composer . " create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist";
             $output->write(' ===> Create project from command: ' . $create_project_cmd);
@@ -255,6 +255,8 @@ class NewCommand extends Command
      */
     protected function runCommands($commands, InputInterface $input, OutputInterface $output)
     {
+        global $_ENV;
+
         if ($input->getOption('no-ansi')) {
             $commands = array_map(function ($value) {
                 if (substr($value, 0, 5) === 'chmod') {
@@ -277,7 +279,14 @@ class NewCommand extends Command
 
         print_r($commands);
 
-        $process = Process::fromShellCommandline(implode(' && ', $commands), null, null, null, null);
+        $envs = [
+            'PHP_ARGS' => getenv('PHP_ARGS'),
+            'COMPOSER_BIN' => getenv('COMPOSER_BIN')
+        ];
+
+        print_r($envs);
+
+        $process = Process::fromShellCommandline(implode(' && ', $commands), null, $envs, null, null);
 
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             try {

@@ -93,7 +93,7 @@ class NewCommand extends Command
             $commands[] = "echo 'skipping composer create-project' ";
             $commands[] = $this->getPhpWithArguments() . ' -m';
         } else {
-            $create_project_cmd = $composer . "create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist";
+            $create_project_cmd = $composer . " create-project laravel/laravel \"$directory\" $version --remove-vcs --prefer-dist";
             $output->write(' ===> Create project from command: ' . $create_project_cmd);
             $commands[] = $create_project_cmd;
         }
